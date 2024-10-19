@@ -59,6 +59,9 @@ async function main() {
     case "reset-db" :
       await deleteAllMovies(Model);
       break;
+    case "get-all" :
+      await getAllMovies(Model)
+      break;
     default:
       throw Error("command not found");
   }
@@ -78,7 +81,6 @@ async function checkConnection() {
   console.log("check db connection ended...");
 }
 
-
 async function insertAllMovies(model) {
   let seed = fs.readFileSync('seed.json');
   seed = Buffer.from(seed);
@@ -91,6 +93,12 @@ async function insertAllMovies(model) {
 async function deleteAllMovies(model) {
   await model.deleteMany();
   console.log('successfully delete all movies');
+}
+
+async function getAllMovies(model) {
+  const movies = await model.find();
+  console.log(movies);
+  console.log('successfully get all movies');
 }
 
 main();
