@@ -20,10 +20,10 @@ async function fetchPokemon() {
 function PokemonCard(props) {
   return React.createElement(
     "div",
-    { className: "" },
-    React.createElement("img", { src: props.image, alt: props.name }),
-    React.createElement("h2", null, props.name),
-    React.createElement("p", null, `Type: ${props.types}`)
+    { className: "w-44 h-56 border-[1px] border-stone-200 border-solid rounded-md shadow-md px-4 py-6 flex flex-col justify-center items-center" },
+    React.createElement("img", { src: props.image, alt: props.name, className: "w-28" }),
+    React.createElement("h2", {className: "font-semibold text-xl capitalize mt-1"}, props.name),
+    React.createElement("p", {className: "text-stone-500 mt-[2px]"}, `${props.types}`)
   );
 }
 
@@ -39,7 +39,7 @@ function PokemonList() {
 
   return React.createElement(
     "div",
-    { className: "flex flex-wrap justify-center" },
+    { className: "flex flex-wrap justify-center gap-6 my-10" },
     pokemonData.map((pokemon) =>
       React.createElement(PokemonCard, {
         key: pokemon.id,
@@ -55,7 +55,7 @@ function PokemonList() {
 function App() {
   return React.createElement(
     "div",
-    { className: "" },
+    { className: "pt-14" },
     React.createElement(
       "header",
       { className: "" },
