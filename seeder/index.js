@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
+const fs = require('fs');
+const { Buffer } = require('buffer');
 
 async function main() {
   /**--------------- Not allowed to be edited - start - --------------------- */
@@ -18,7 +20,32 @@ async function main() {
   });
 
   // Define a schema for the collection
-  const schema = new mongoose.Schema({}, { strict: false });
+  const schema = new mongoose.Schema({
+    title: {
+      type: String,
+      required: true
+    },
+    year: {
+      type: Number,
+      required: true
+    },
+    gendre: {
+      type: [String],
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    director: {
+      type: String,
+      required: true
+    },
+    cast: {
+      type: [String],
+      required: true
+    },
+  }, { strict: false });
   const Model = mongoose.model(collection, schema);
 
   switch (command) {
@@ -26,6 +53,15 @@ async function main() {
       await checkConnection();
       break;
     // TODO: Buat logic fungsionalitas yg belum tersedia di bawah
+    case "bulk-insert" :
+      await insertAllMovies(Model);
+      break;
+    case "reset-db" :
+      await deleteAllMovies(Model);
+      break;
+    case "get-all" :
+      await getAllMovies(Model)
+      break;
     default:
       throw Error("command not found");
   }
@@ -43,6 +79,26 @@ async function checkConnection() {
     console.error("MongoDB connection failed:", err);
   }
   console.log("check db connection ended...");
+}
+
+async function insertAllMovies(model) {
+  let seed = fs.readFileSync('seed.json');
+  seed = Buffer.from(seed);
+  seed = seed.toString();
+  seed = JSON.parse(seed);
+  await model.insertMany(seed);
+  console.log('successfully insert all movies');
+}
+
+async function deleteAllMovies(model) {
+  await model.deleteMany();
+  console.log('successfully delete all movies');
+}
+
+async function getAllMovies(model) {
+  const movies = await model.find();
+  console.log(movies);
+  console.log('successfully get all movies');
 }
 
 main();
