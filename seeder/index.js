@@ -56,6 +56,9 @@ async function main() {
     case "bulk-insert" :
       await insertAllMovies(Model);
       break;
+    case "reset-db" :
+      await deleteAllMovies(Model);
+      break;
     default:
       throw Error("command not found");
   }
@@ -82,7 +85,12 @@ async function insertAllMovies(model) {
   seed = seed.toString();
   seed = JSON.parse(seed);
   await model.insertMany(seed);
-  console.log('successfully insert all documents');
+  console.log('successfully insert all movies');
+}
+
+async function deleteAllMovies(model) {
+  await model.deleteMany();
+  console.log('successfully delete all movies');
 }
 
 main();
